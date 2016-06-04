@@ -40,10 +40,10 @@ class TicTacToe
       if valid_move?(index)
          move(index, current_player)
          display_board
-         binding.pry
+         #binding.pry
       else
         turn
-        binding.pry
+        #binding.pry
       end
     end
 
