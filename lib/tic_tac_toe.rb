@@ -21,7 +21,7 @@ class TicTacToe
       puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
     end
 
-    def move(index, current_player="X")
+    def move(index, current_player)
       @board[index] = current_player
     end
 
@@ -30,18 +30,20 @@ class TicTacToe
     end
 
     def valid_move?(index)
-      @board[index].between?(0,8) && !position_taken?(index)
+      index.between?(0,8) && !position_taken?(index)
     end
 
     def turn
       puts "Please enter 1-9:"
       input = gets.strip
-      @board[index] = input_to_index(input)
+      index = input_to_index(input)
       if valid_move?(index)
          move(index, current_player)
          display_board
+         binding.pry
       else
         turn
+        binding.pry
       end
     end
 
@@ -62,7 +64,7 @@ class TicTacToe
     end
 
     def over?
-      @board.won? || @board.draw?
+      won? || draw?
     end
 
     def winner
@@ -70,33 +72,33 @@ class TicTacToe
     end
 
     def draw?
-      !@board.won? && @board.full?
+      !won? && full?
     end
 
     def won?
-        WIN_COMBINATIONS.detect do |win_combination|
-          win_index_1 = win_combination[0] #index 0
-          win_index_2 = win_combination[1] #index 1
-          win_index_3 = win_combination[2] #index 2
+          WIN_COMBINATIONS.detect do |win_combination|
+            win_index_1 = win_combination[0] #index 0
+            win_index_2 = win_combination[1] #index 1
+            win_index_3 = win_combination[2] #index 2
 
-          position_1 = @board[win_index_1] # load the value of the board at win_index_1
-          position_2 = @board[win_index_2] # load the value of the board at win_index_2
-          position_3 = @board[win_index_3] # load the value of the board at win_index_3
+            position_1 = @board[win_index_1] # load the value of the board at win_index_1
+            position_2 = @board[win_index_2] # load the value of the board at win_index_2
+            position_3 = @board[win_index_3] # load the value of the board at win_index_3
 
-          (position_1 == "X" && position_2 == "X" && position_3 == "X") ||
-          (position_1 == "O" && position_2 == "O" && position_3 == "O")
+            (position_1 == "X" && position_2 == "X" && position_3 == "X") ||
+            (position_1 == "O" && position_2 == "O" && position_3 == "O")
 
-      end
+        end
+    end
+    def play
+        until over?
+          turn
+        end
+        if won?
+            puts "Congratulations #{winner}!"
+        elsif draw?
+            puts "Cats Game!"
 
-      def play
-          until @board.over?
-            @board.turn
-          end
-          if @board.won?
-              puts "Congratulations #{@board.winner}!"
-          elsif @board.draw?
-              puts "Cats Game!"
-
-          end
-      end
+        end
+    end
 end
